@@ -1,12 +1,23 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { Text, View, SafeAreaView } from 'react-native';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View>
-        <Text>Hello World!</Text>
+class Greeting extends Component {
+	render() {
+		return (
+			<View>
+        <Text>Welcome, {this.props.name}!</Text>
       </View>
-    );
-  }
+		);
+	}
+}
+
+export default class App extends Component {
+	render() {
+		return (
+			<SafeAreaView>
+        <Greeting name='Dishant' />
+        <Greeting name='Lauren' />
+      </SafeAreaView>
+		);
+	}
 }
