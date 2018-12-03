@@ -6,6 +6,7 @@ export default class ToDoApp extends Component {
     constructor(){
         super();
         this.state = {
+            text: '',
             list: [
                 {
                     id: 1,
@@ -22,15 +23,34 @@ export default class ToDoApp extends Component {
                     text: 'Third Todo',
                     done: true
                 }
-            ]
+            ],
+            lastId: 3
         }
         this.onChangeDone = this.onChangeDone.bind(this);
         this.renderItem = this.renderItem.bind(this);
         this.cleanup = this.cleanup.bind(this);
+        this.onChangeText = this.onChangeText.bind(this);
+        this.onAdd = this.onAdd.bind(this);
+    }
+
+    onChangeText(newText){
+        this.setState({
+            text: newText
+        })
     }
 
     onAdd(){
-        console.log('Add was pressed!');
+        if(this.state.text !== ''){
+            this.state.list.push({
+                id: this.state.lastId + 1,
+                text: this.state.text,
+                done: false
+            });
+            this.setState({
+                lastId: this.state.lastId + 1,
+                text: ''
+            })
+        }
     }
 
     onChangeDone(id, newVal){
@@ -88,6 +108,8 @@ export default class ToDoApp extends Component {
                     justifyContent: 'space-between'
                 }}>
                     <TextInput
+                        value={this.state.text}
+                        onChangeText={this.onChangeText}
                         placeholder='Enter your text here'
                         style={{
                             fontSize: 20,
@@ -97,8 +119,10 @@ export default class ToDoApp extends Component {
                             flex: 2
                         }}
                         numberOfLines={3}
+                        onSubmitEditing={this.onAdd}
+                        returnKeyType='done'
                     />
-                    <Button onPress={this.onAdd} title='Add todo' />
+                    <Button disabled={this.state.text === ''} onPress={this.onAdd} title='Add todo' />
                 </View>
                 <View>
                     <FlatList 
