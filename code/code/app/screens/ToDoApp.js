@@ -1,12 +1,27 @@
 import React, { Component } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, FlatList, Text } from 'react-native';
 import Heading from '../components/Heading';
 
 export default class ToDoApp extends Component {
-
+    constructor(){
+        super();
+        this.state = {
+            list: ['firsttodo', 'second todo', 'third todo']
+        }
+    }
 
     onAdd(){
         console.log('Add was pressed!');
+    }
+
+    renderItem(data){
+        return (
+            <View key={data.item}>
+                <Text>
+                    {data.item}
+                </Text>
+            </View>
+        )
     }
 
     render(){
@@ -29,6 +44,12 @@ export default class ToDoApp extends Component {
                         numberOfLines={3}
                     />
                     <Button onPress={this.onAdd} title='Add todo' />
+                </View>
+                <View>
+                    <FlatList 
+                        data={this.state.list}
+                        renderItem={this.renderItem}
+                    />
                 </View>
             </View>
         );
