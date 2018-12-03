@@ -1,25 +1,69 @@
 import React, { Component } from 'react';
-import { View, TextInput, Button, FlatList, Text } from 'react-native';
+import { View, TextInput, Button, FlatList, Text, Switch } from 'react-native';
 import Heading from '../components/Heading';
 
 export default class ToDoApp extends Component {
     constructor(){
         super();
         this.state = {
-            list: ['firsttodo', 'second todo', 'third todo']
+            list: [
+                {
+                    id: 1,
+                    text: 'First Todo',
+                    done: false
+                },
+                {
+                    id: 2,
+                    text: 'Second Todo',
+                    done: false
+                },
+                {
+                    id: 3,
+                    text: 'Third Todo',
+                    done: true
+                }
+            ]
         }
+        this.onChangeDone = this.onChangeDone.bind(this);
+        this.renderItem = this.renderItem.bind(this);
     }
 
     onAdd(){
         console.log('Add was pressed!');
     }
 
+    onChangeDone(id, newVal){
+        console.log(id, newVal)
+        let list = this.state.list
+        list.map(val => {
+            if(val.id === id){
+                val.done = newVal
+            }
+        })
+        console.log(list)
+        this.setState({
+            list: list
+        })
+    }
+
     renderItem(data){
         return (
-            <View key={data.item}>
-                <Text>
-                    {data.item}
+            <View style={{
+                padding: 30,
+                borderBottomColor: 'grey',
+                borderBottomWidth: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+            }}>
+                <Text style={{
+                    textDecorationLine: data.item.done ? 'line-through' : 'none'
+                }}>
+                    {data.item.text}
                 </Text>
+                <Switch 
+                    onValueChange={(newVal) => this.onChangeDone(data.item.id, newVal)}
+                    value={data.item.done}
+                />
             </View>
         )
     }
@@ -49,6 +93,10 @@ export default class ToDoApp extends Component {
                     <FlatList 
                         data={this.state.list}
                         renderItem={this.renderItem}
+                        extraData={this.state}
+                        keyExtractor={(data) => {
+                            return "" + data.id
+                        }}
                     />
                 </View>
             </View>
