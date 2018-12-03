@@ -6,6 +6,7 @@ export default class ToDoApp extends Component {
     constructor(){
         super();
         this.state = {
+            text: '',
             list: [
                 {
                     id: 1,
@@ -22,14 +23,23 @@ export default class ToDoApp extends Component {
                     text: 'Third Todo',
                     done: true
                 }
-            ]
+            ],
+            lastIndex: 3
         }
         this.onChangeDone = this.onChangeDone.bind(this);
         this.renderItem = this.renderItem.bind(this);
+        this.cleanup = this.cleanup.bind(this);
     }
 
     onAdd(){
-        console.log('Add was pressed!');
+        if(this.state.text !== ''){
+            let list = this.state.list;
+            list.push({
+                id: this.state.lastIndex + 1,
+                text: this.state.text
+            })
+            console.log('Add was pressed!');
+        }
     }
 
     onChangeDone(id, newVal){
@@ -68,6 +78,16 @@ export default class ToDoApp extends Component {
         )
     }
 
+    cleanup(){
+        let list = this.state.list;
+        list = list.filter(val => {
+            return !val.done
+        });
+        this.setState({
+            list: list
+        })
+    }
+
     render(){
         return (
             <View>
@@ -98,6 +118,14 @@ export default class ToDoApp extends Component {
                             return "" + data.id
                         }}
                     />
+                </View>
+                <View>
+                    {this.state.list.length > 0 ? (
+                        <Button 
+                        title='Clean up' 
+                        onPress={this.cleanup}
+                    />
+                    ) : null}
                 </View>
             </View>
         );
